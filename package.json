@@ -1,0 +1,6 @@
+{
+  "name":"my_project",
+  "dependencies": {
+    "maplibre-gl": "^5.24.0"
+  }
+}
