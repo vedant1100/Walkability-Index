@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Walkability by County — CA</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        nav {
+            height: 50px;
+            background: #1a202c;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-brand {
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex: 1;
+        }
+
+        .nav-link {
+            color: #a0aec0;
+            text-decoration: none;
+            margin-left: 24px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding-bottom: 3px;
+        }
+
+        .nav-link:hover { color: white; }
+        .nav-link.active { color: white; border-bottom: 2px solid white; }
+
+        .page {
+            padding: 28px 36px;
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        h2 {
+            margin: 0 0 6px 0;
+            color: #1a202c;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 13px;
+            margin: 0 0 24px 0;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 24px 20px 16px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 1260px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <span class="nav-brand">CA Walkability Index</span>
+        <a href="index.html" class="nav-link">Map View</a>
+        <a href="barchart.html" class="nav-link active">County Breakdown</a>
+    </nav>
+
+    <div class="page">
+        <h2>Walkability Tier Breakdown by County</h2>
+        <p class="subtitle">All 58 California counties · All block groups statewide · Sorted by average NWI score (highest → lowest)</p>
+
+        <div class="chart-card">
+            <div class="chart-wrapper">
+                <canvas id="chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        fetch('county_walkability.json')
+            .then(r => r.json())
+            .then(data => {
+                const ctx = document.getElementById('chart').getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.map(c => c.name),
+                        datasets: [
+                            {
+                                label: 'Least Walkable (1–5.75)',
+                                data: data.map(c => c.least),
+                                backgroundColor: '#C99383',
+                                borderWidth: 0,
+                            },
+                            {
+                                label: 'Below Average (5.76–10.5)',
+                                data: data.map(c => c.below),
+                                backgroundColor: '#fdae61',
+                                borderWidth: 0,
+                            },
+                            {
+                                label: 'Above Average (10.51–15.25)',
+                                data: data.map(c => c.above),
+                                backgroundColor: '#d4e06b',
+                                borderWidth: 0,
+                            },
+                            {
+                                label: 'Most Walkable (15.26–20)',
+                                data: data.map(c => c.most),
+                                backgroundColor: '#1a9641',
+                                borderWidth: 0,
+                            },
+                        ]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                stacked: true,
+                                max: 100,
+                                grid: { color: 'rgba(0,0,0,0.05)' },
+                                title: {
+                                    display: true,
+                                    text: '% of Block Groups',
+                                    color: '#555',
+                                    font: { size: 12 }
+                                },
+                                ticks: {
+                                    callback: v => v + '%',
+                                    color: '#666',
+                                    font: { size: 11 }
+                                }
+                            },
+                            y: {
+                                stacked: true,
+                                grid: { display: false },
+                                ticks: {
+                                    color: '#333',
+                                    font: { size: 11 }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    font: { size: 12 },
+                                    padding: 20,
+                                    usePointStyle: true,
+                                    pointStyleWidth: 14,
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    title: items => {
+                                        const c = data[items[0].dataIndex];
+                                        return `${c.name} County  ·  Avg NWI: ${c.avgScore}  ·  ${c.total} block groups`;
+                                    },
+                                    label: ctx => `  ${ctx.dataset.label}: ${ctx.raw}%`
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+    </script>
+
+</body>
+</html>

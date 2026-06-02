@@ -1,5 +1,8 @@
 {
   "name":"my_project",
+  "scripts": {
+    "start": "npx serve .."
+  },
   "dependencies": {
     "maplibre-gl": "^5.24.0"
   }

@@ -7,22 +7,61 @@
     <script src="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.js"></script>
     <link href="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.css" rel="stylesheet" />
     <style>
+        * { box-sizing: border-box; }
+
         body {
             margin: 0;
             padding: 0;
             display: flex;
+            flex-direction: column;
             font-family: sans-serif;
+            height: 100vh;
         }
 
-        h1,
-        h2,
-        h3,
-        h4 {
+        nav {
+            height: 50px;
+            background: #1a202c;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            z-index: 10;
+        }
+
+        .nav-brand {
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex: 1;
+        }
+
+        .nav-link {
+            color: #a0aec0;
+            text-decoration: none;
+            margin-left: 24px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding-bottom: 3px;
+        }
+
+        .nav-link:hover { color: white; }
+        .nav-link.active { color: white; border-bottom: 2px solid white; }
+
+        .content-row {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        h1, h2, h3, h4 {
             margin: 0 0 5px 0;
             color: #1a202c;
-            /* Updated: Darker shade (matches the deep blue-gray of the main title) */
             font-weight: 700;
-            /* Updated: Added boldness for strength and clarity */
             font-size: 14px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -30,16 +69,15 @@
 
         #sidebar {
             width: 30%;
-            height: 100vh;
+            height: 100%;
             padding: 20px;
-            box-sizing: border-box;
             overflow-y: auto;
             background: #f8f9fa;
         }
 
         #map {
             width: 70%;
-            height: 100vh;
+            height: 100%;
         }
 
         .stat-box {
@@ -63,11 +101,7 @@
             min-width: 180px;
         }
 
-        #legend h4 {
-            margin: 0 0 10px 0;
-            font-size: 13px;
-            font-weight: bold;
-        }
+        #legend h4 { margin: 0 0 10px 0; font-size: 13px; font-weight: bold; }
 
         #legend-gradient {
             height: 14px;
@@ -84,64 +118,64 @@
             margin-bottom: 8px;
         }
 
-        .legend-tier {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-            font-size: 11px;
-        }
-
-        .legend-tier span {
-            width: 14px;
-            height: 14px;
-            border-radius: 3px;
-            margin-right: 7px;
-            flex-shrink: 0;
-        }
+        .legend-tier { display: flex; align-items: center; margin-bottom: 5px; font-size: 11px; }
+        .legend-tier span { width: 14px; height: 14px; border-radius: 3px; margin-right: 7px; flex-shrink: 0; }
     </style>
 </head>
 
 <body>
 
-    <div id="sidebar">
-        <h2>Region Summary</h2>
-        <p>Move or zoom the map to dynamically update statistics for the visible area.</p>
+    <nav>
+        <span class="nav-brand">CA Walkability Index</span>
+        <a href="index.html" class="nav-link active">Map View</a>
+        <a href="barchart.html" class="nav-link">County Breakdown</a>
+    </nav>
 
-        <div class="stat-box">
-            <h3>Average Walkability Score</h3>
-            <h1 id="avg-score">--</h1>
-        </div>
+    <div class="content-row">
+        <div id="sidebar">
+            <h2>Region Summary</h2>
+            <p>Move or zoom the map to dynamically update statistics for the visible area.</p>
 
-        <div class="stat-box">
-            <h3>Breakdown of Walkability Tiers</h3>
-            <p>Most Walkable: <span id="tier-most">--</span>%</p>
-            <p>Above Average: <span id="tier-above">--</span>%</p>
-            <p>Below Average: <span id="tier-below">--</span>%</p>
-            <p>Least Walkable: <span id="tier-least">--</span>%</p>
-        </div>
-
-        <div class="stat-box" id="click-details">
-            <h3>Selected Block Group</h3>
-            <p>Click on a neighborhood to see its D2a (Density), D2b (Land Use), D3b (Intersections), and D4a (Transit) component breakdown.</p>
-        </div>
-    </div>
-
-    <div id="map">
-        <div id="legend">
-            <h4>Walkability Score (NWI)</h4>
-            <div id="legend-gradient"></div>
-            <div id="legend-ticks">
-                <span>1</span>
-                <span>5.75</span>
-                <span>10.5</span>
-                <span>15.25</span>
-                <span>20</span>
+            <div class="stat-box">
+                <h3>Average Walkability Score</h3>
+                <h1 id="avg-score">--</h1>
             </div>
-            <div class="legend-tier"><span style="background:#E08F72"></span> 1–5.75 &nbsp; Least Walkable</div>
-            <div class="legend-tier"><span style="background:#E8BD5D"></span> 5.76–10.5 &nbsp; Below Average</div>
-            <div class="legend-tier"><span style="background:#FFFFFF; border:1px solid #ccc"></span> 10.51–15.25 &nbsp;
-                Above Average</div>
-            <div class="legend-tier"><span style="background:#E9FA00"></span> 15.26–20 &nbsp; Most Walkable</div>
+
+            <div class="stat-box">
+                <h3>Breakdown of Walkability Tiers</h3>
+                <p>Most Walkable: <span id="tier-most">--</span>%</p>
+                <p>Above Average: <span id="tier-above">--</span>%</p>
+                <p>Below Average: <span id="tier-below">--</span>%</p>
+                <p>Least Walkable: <span id="tier-least">--</span>%</p>
+            </div>
+
+            <div class="stat-box">
+                <h3>Score Distribution</h3>
+                <svg id="histogram" viewBox="0 0 275 115" style="width:100%;height:105px;display:block;"></svg>
+            </div>
+
+            <div class="stat-box" id="click-details">
+                <h3>Selected Block Group</h3>
+                <p>Click on a neighborhood to see its D2a (Density), D2b (Land Use), D3b (Intersections), and D4a (Transit) component breakdown.</p>
+            </div>
+        </div>
+
+        <div id="map">
+            <div id="legend">
+                <h4>Walkability Score (NWI)</h4>
+                <div id="legend-gradient"></div>
+                <div id="legend-ticks">
+                    <span>1</span>
+                    <span>5.75</span>
+                    <span>10.5</span>
+                    <span>15.25</span>
+                    <span>20</span>
+                </div>
+                <div class="legend-tier"><span style="background:#E08F72"></span> 1–5.75 &nbsp; Least Walkable</div>
+                <div class="legend-tier"><span style="background:#E8BD5D"></span> 5.76–10.5 &nbsp; Below Average</div>
+                <div class="legend-tier"><span style="background:#FFFFFF; border:1px solid #ccc"></span> 10.51–15.25 &nbsp; Above Average</div>
+                <div class="legend-tier"><span style="background:#E9FA00"></span> 15.26–20 &nbsp; Most Walkable</div>
+            </div>
         </div>
     </div>
 
