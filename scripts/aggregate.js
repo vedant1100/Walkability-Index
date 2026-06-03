@@ -1,5 +1,5 @@
-// Run once from VIZ/: node aggregate.js
-// Reads ../CA_Walkability.geojson → county_walkability.json
+// Run once from VIZ/: node scripts/aggregate.js
+// Reads data/CA_Walkability.geojson → data/county_walkability.json
 const fs = require('fs');
 
 const CA_COUNTIES = {
@@ -21,7 +21,7 @@ const CA_COUNTIES = {
 };
 
 console.log('Reading GeoJSON...');
-const geojson = JSON.parse(fs.readFileSync('../CA_Walkability.geojson', 'utf8'));
+const geojson = JSON.parse(fs.readFileSync('data/CA_Walkability.geojson', 'utf8'));
 console.log(`${geojson.features.length} features found`);
 
 const counties = {};
@@ -53,5 +53,5 @@ const result = Object.values(counties)
   }))
   .sort((a, b) => b.avgScore - a.avgScore);
 
-fs.writeFileSync('county_walkability.json', JSON.stringify(result));
-console.log(`Done — ${result.length} counties written to county_walkability.json`);
+fs.writeFileSync('data/county_walkability.json', JSON.stringify(result));
+console.log(`Done — ${result.length} counties written to data/county_walkability.json`);

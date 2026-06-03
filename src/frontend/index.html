@@ -179,7 +179,21 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/chat.js"></script>
+    <script>
+        ChatWidget.init(function () {
+            const avgScore = document.getElementById('avg-score')?.innerText;
+            if (!avgScore || avgScore === '--') return null;
+            return {
+                avgScore,
+                most:  document.getElementById('tier-most')?.innerText,
+                above: document.getElementById('tier-above')?.innerText,
+                below: document.getElementById('tier-below')?.innerText,
+                least: document.getElementById('tier-least')?.innerText
+            };
+        });
+    </script>
 </body>
 
 </html>

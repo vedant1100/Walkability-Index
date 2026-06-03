@@ -108,7 +108,7 @@
     </div>
 
     <script>
-        fetch('county_walkability.json')
+        fetch('../../data/county_walkability.json')
             .then(r => r.json())
             .then(data => {
                 const ctx = document.getElementById('chart').getContext('2d');
@@ -198,6 +198,8 @@
                 });
             });
     </script>
+    <script src="../js/chat.js"></script>
+    <script>ChatWidget.init();</script>
 
 </body>
 </html>
