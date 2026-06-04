@@ -4,3 +4,6 @@ screenshot.png
 ss_barchart.png
 ss_map.png
 .env
+
+.vercel
+.env*
