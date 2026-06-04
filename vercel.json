@@ -1,5 +1,5 @@
 {
   "buildCommand": "",
-  "outputDirectory": null,
+  "outputDirectory": ".",
   "cleanUrls": true
 }

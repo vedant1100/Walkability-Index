@@ -65,7 +65,7 @@
             margin: 0 0 6px 0;
             color: #1a202c;
             font-size: 20px;
-            font-weight: 700;
+            font-weight: 800;
         }
 
         .subtitle {
@@ -108,7 +108,7 @@
     </div>
 
     <script>
-        fetch('../../data/county_walkability.json')
+        fetch('data/county_walkability.json')
             .then(r => r.json())
             .then(data => {
                 const ctx = document.getElementById('chart').getContext('2d');
@@ -198,7 +198,7 @@
                 });
             });
     </script>
-    <script src="../js/chat.js"></script>
+    <script src="src/js/chat.js"></script>
     <script>ChatWidget.init();</script>
 
 </body>

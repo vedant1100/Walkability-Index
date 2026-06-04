@@ -61,7 +61,7 @@
         h1, h2, h3, h4 {
             margin: 0 0 5px 0;
             color: #1a202c;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 14px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -149,11 +149,6 @@
                 <p>Least Walkable: <span id="tier-least">--</span>%</p>
             </div>
 
-            <div class="stat-box">
-                <h3>Score Distribution</h3>
-                <svg id="histogram" viewBox="0 0 275 115" style="width:100%;height:105px;display:block;"></svg>
-            </div>
-
             <div class="stat-box" id="click-details">
                 <h3>Selected Block Group</h3>
                 <p>Click on a neighborhood to see its D2a (Density), D2b (Land Use), D3b (Intersections), and D4a (Transit) component breakdown.</p>
@@ -179,8 +174,8 @@
         </div>
     </div>
 
-    <script src="../js/script.js"></script>
-    <script src="../js/chat.js"></script>
+    <script src="src/js/script.js"></script>
+    <script src="src/js/chat.js"></script>
     <script>
         ChatWidget.init(function () {
             const avgScore = document.getElementById('avg-score')?.innerText;
