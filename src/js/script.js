@@ -17,7 +17,7 @@ map.on('error', (e) => {
         document.getElementById('tier-above').innerText = '—';
         document.getElementById('tier-below').innerText = '—';
         document.getElementById('tier-least').innerText = '—';
-        console.error('Failed to load walkability data. Check that data/CA_Walkability.geojson exists and the server is running from VIZ/.', e.error);
+        console.error('Failed to load walkability data from GitHub release asset.', e.error);
     }
 });
 
@@ -25,7 +25,7 @@ map.on('load', () => {
     // 1. Add your converted block group data as a map source
     map.addSource('walkability-data', {
         type: 'geojson',
-        data: '../../data/CA_Walkability.geojson'
+        data: 'https://github.com/vedant1100/Walkability-Index/releases/download/v1.0-data/CA_Walkability.geojson'
     });
 
     // Render the polygons color-coded by the official EPA Walkability Index Tiers
